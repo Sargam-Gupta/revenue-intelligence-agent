@@ -1,8 +1,11 @@
 .env
 CLAUDE.local.md
+session_resume.md
 .streamlit/secrets.toml
 __pycache__/
 *.pyc
 .DS_Store
 venv/
 .venv/
+.playwright-mcp/
+*.png
