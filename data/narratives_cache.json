@@ -1,0 +1,112 @@
+{
+  "2026-03-30": {
+    "executive_summary": "Total revenue closed at $392,588, beating plan by $6,333 (+1.6%) and keeping the portfolio On Track. The beat was driven primarily by API, which outperformed plan by 7.6% ($3,681), with SMB and Consulting adding further upside. Enterprise underperformed slightly (-1.0%) but was offset by strength across the smaller product lines.",
+    "top_3_drivers": [
+      "API exceeded plan by 7.6% (+$3,681 to $52,058), the single largest contributor to the overall beat despite an At Risk status.",
+      "SMB came in 3.2% above plan (+$3,248 to $106,117), providing the largest dollar contribution to upside.",
+      "Consulting beat plan by 4.6% (+$1,402 to $32,029), partially offset by Enterprise running 1.0% below plan (-$1,998 to $202,385)."
+    ],
+    "risk_flag": "API is flagged At Risk despite its 7.6% beat\\u2014monitor whether this outperformance is sustainable or a pull-forward that could reverse next week."
+  },
+  "2026-04-06": {
+    "executive_summary": "Total revenue of $379,982 came in $6,526 (+1.7%) above plan, keeping the portfolio On Track. The beat was driven primarily by SMB outperformance of +6.8% ($6,758 above plan), which more than offset modest shortfalls in Enterprise and Consulting. With the largest segment, Enterprise, slightly below plan and down 4.9% WoW, the favorable variance rests on smaller lines that may not sustain momentum.",
+    "top_3_drivers": [
+      "SMB outperformed plan by +6.8% ($105,724 vs $98,966) with an improving trend, the single largest contributor to the portfolio beat.",
+      "API exceeded plan by +5.2% ($53,187 vs $50,575) and grew +2.2% WoW, adding incremental upside despite a declining trend.",
+      "Enterprise came in -0.8% below plan ($192,509 vs $194,050) and fell -4.9% WoW, partially offset by Consulting's -4.4% shortfall, dampening the overall beat."
+    ],
+    "risk_flag": "Watch Enterprise next week: as the largest segment at $192,509, its -4.9% WoW decline could erase the portfolio's favorable variance if the softening continues."
+  },
+  "2026-04-13": {
+    "executive_summary": "Portfolio revenue came in at $374,570 against a plan of $385,656, a -2.9% (-$11,087) miss that keeps the portfolio On Track overall. Enterprise was the single biggest driver of the shortfall, missing plan by 7.0% (-$14,018) while declining 2.9% week-over-week. Outperformance in SMB (+2.1%) and Consulting (+6.3%) partially offset the Enterprise drag, limiting the net portfolio variance.",
+    "top_3_drivers": [
+      "Enterprise underperformance drove the entire portfolio miss, landing at $186,855 vs. $200,873 plan (-7.0%, -$14,018) with a declining trend and -2.9% WoW.",
+      "SMB outperformed at $104,783 vs. $102,621 plan (+2.1%), providing a stable offset despite a slight -0.9% WoW dip.",
+      "Consulting beat plan by 6.3% ($33,088 vs. $31,130) and grew 15.8% WoW, contributing the strongest momentum of the portfolio.",
+      "API came in modestly below plan at $49,845 vs. $51,032 (-2.3%) with a notable -6.3% WoW decline."
+    ],
+    "risk_flag": "Watch Enterprise next week: it is At Risk, declining, and -2.9% WoW, and a continued slide there could push the overall portfolio off track despite SMB and Consulting offsets."
+  },
+  "2026-04-20": {
+    "executive_summary": "Total portfolio revenue came in at $333,654 against a plan of $380,626, a -12.3% variance ($-46,972) that places the portfolio At Risk. The shortfall is almost entirely driven by Enterprise, which missed plan by -22.0% ($-44,980 of the $-46,972 total gap). With Enterprise now in its third consecutive week of decline, the portfolio's largest revenue line is destabilizing and dragging overall performance below threshold.",
+    "top_3_drivers": [
+      "Enterprise drove the miss: actual $159,474 vs plan $204,454 (-22.0%), down -14.7% WoW and accounting for ~96% of the total $-46,972 portfolio variance \u2014 flagged Critical on a 3-week decline.",
+      "SMB held to plan (-0.5%, $97,038 vs $97,557) but is now declining for 3 consecutive weeks (-7.4% WoW), signaling erosion beneath an on-track variance.",
+      "API underperformed at -5.5% ($45,510 vs $48,175) with a -8.7% WoW drop, partially offset by Consulting beating plan +3.9% ($31,631 vs $30,439)."
+    ],
+    "risk_flag": "Enterprise's 22.0% miss and three straight weeks of decline is the dominant risk to watch \u2014 if the -14.7% WoW trajectory continues, the portfolio variance will widen further next week."
+  },
+  "2026-04-27": {
+    "executive_summary": "Total revenue of $374,684 came in 2.7% ($10,459) below plan, keeping the portfolio On Track despite a broad-based miss across all four product lines. Enterprise was the largest dollar contributor to the shortfall at -$5,782 (-2.8% vs. plan), though it posted strong week-over-week growth of +26.5%. The portfolio remains within tolerance, but uniform underperformance against plan signals softening momentum heading into next week.",
+    "top_3_drivers": [
+      "Enterprise drove the bulk of the absolute miss at -$5,782 (-2.8% vs. plan), but its +26.5% WoW surge partially offset portfolio weakness, making it the single most material swing factor.",
+      "API was the weakest performer on a percentage basis at -5.9% (-$2,887 vs. plan) and is the only product line flagged At Risk, with a declining trend and near-flat WoW growth of +0.8%.",
+      "Consulting compounded the shortfall with a -4.4% variance (-$1,309) and the worst momentum in the portfolio at -9.5% WoW, the only line with negative week-over-week growth."
+    ],
+    "risk_flag": "Watch API closely next week: it is the only At Risk line, combining the largest percentage miss (-5.9%), a declining trend, and stalled WoW growth (+0.8%)."
+  },
+  "2026-05-04": {
+    "executive_summary": "Total revenue of $388,675 came in $3,316 (+0.9%) above plan, keeping the portfolio On Track. Outperformance in SMB (+3.2%) and API (+5.3%) more than offset a modest Enterprise shortfall of -1.0%. The portfolio is holding plan with growth concentrated in smaller, higher-velocity segments.",
+    "top_3_drivers": [
+      "SMB beat plan by +3.2% ($105,951 vs $102,661) with strong +7.6% WoW momentum, the largest absolute contributor to favorable variance.",
+      "API exceeded plan by +5.3% ($51,868 vs $49,249) and grew +13.1% WoW, the fastest-growing line and a key offset despite its At Risk status.",
+      "Enterprise underperformed plan by -1.0% ($200,679 vs $202,717), but an improving trend and only -0.5% WoW limited the drag on the portfolio."
+    ],
+    "risk_flag": "Watch API closely next week: despite +5.3% variance and +13.1% WoW growth, it remains flagged At Risk, suggesting volatility that could reverse the portfolio's slim +0.9% surplus."
+  },
+  "2026-05-11": {
+    "executive_summary": "Total portfolio revenue reached $393,405 against a plan of $373,220, a favorable variance of $20,185 (+5.4%). The result was driven primarily by an outsized SMB beat of +18.0% ($114,599 vs $97,118 plan), which more than offset continued weakness in API. Despite the topline beat, portfolio status remains At Risk given API's deterioration and questions over SMB durability.",
+    "top_3_drivers": [
+      "SMB outperformed plan by +18.0% ($17,481 favorable) with +8.2% WoW growth, the single largest contributor to the overall beat though flagged as an unusually large anomaly.",
+      "Enterprise delivered $202,354 (+2.9% vs plan, +0.8% WoW) with an improving trend, providing a stable base that reinforced the favorable variance.",
+      "API underperformed at $44,953 (-7.9% vs plan) and declined -13.3% WoW, the primary drag partially offsetting gains elsewhere."
+    ],
+    "risk_flag": "Watch whether the +18.0% SMB upside is sustainable or a one-time anomaly, and monitor API's -13.3% WoW decline for further deterioration."
+  },
+  "2026-05-18": {
+    "executive_summary": "Portfolio revenue reached $389,009 against a plan of $381,917, a favorable variance of $7,092 (+1.9%) keeping the portfolio On Track. Enterprise was the primary driver, beating plan by 4.5% ($212,413 vs $203,283) and growing 5.0% week-over-week. The beat offsets continued underperformance in API (-6.2%), signaling healthy demand concentration in the largest product line.",
+    "top_3_drivers": [
+      "Enterprise outperformed by +4.5% ($212,413 vs $203,283 plan) with +5.0% WoW growth, contributing the bulk of the $7,092 portfolio surplus.",
+      "SMB exceeded plan by +1.1% ($100,768 vs $99,671) but declined -12.1% WoW, indicating the beat came off a softening base.",
+      "API missed plan by -6.2% ($45,564 vs $48,559) with a Declining trend and At Risk status, the only material drag on the portfolio."
+    ],
+    "risk_flag": "API remains At Risk and Declining (-6.2% to plan); combined with SMB's -12.1% WoW drop, monitor whether weakness in smaller product lines accelerates and erodes the Enterprise-driven surplus next week."
+  },
+  "2026-05-25": {
+    "executive_summary": "Total revenue of $388,755 beat plan by $7,523 (+2.0%), keeping the portfolio On Track. Enterprise was the primary driver, exceeding plan by 4.2% ($8,524) and more than offsetting shortfalls in API and Consulting. With three of four lines on plan, the portfolio remains healthy heading into next week.",
+    "top_3_drivers": [
+      "Enterprise outperformed plan by 4.2% (+$8,524 to $209,568), contributing the bulk of the favorable variance despite a -1.3% week-over-week dip.",
+      "API fell 3.1% below plan (-$1,576 to $48,661), the largest negative variance, partially muting the Enterprise gain even as it posted +6.8% WoW growth.",
+      "SMB held slightly above plan at +0.9% (+$866 to $101,944) but is showing a declining trend, providing only marginal upside support."
+    ],
+    "risk_flag": "SMB and API both carry a Declining trend, so watch for SMB's narrow +0.9% beat eroding into a plan miss next week."
+  },
+  "2026-06-01": {
+    "executive_summary": "Total revenue of $360,523 missed plan by $15,446 (-4.1%), keeping the portfolio On Track despite broad-based declines across all four product lines. The primary driver was the API line, which fell 15.0% below plan ($40,998 vs. $48,233) and dropped 15.7% week-over-week. With every product line trending down, the shortfall reflects portfolio-wide softening rather than an isolated issue.",
+    "top_3_drivers": [
+      "API underperformed most severely at -15.0% vs. plan ($7,235 gap) and -15.7% WoW, moving to At Risk status and contributing the largest proportional miss.",
+      "Enterprise, the largest line at $192,573, came in just -1.5% under plan but contracted sharply -8.1% WoW, signaling momentum loss in the portfolio's biggest revenue source.",
+      "SMB missed plan by -4.3% ($98,450 vs. $102,827) with a -3.4% WoW decline, adding $4,377 to the total shortfall."
+    ],
+    "risk_flag": "Consulting has now declined for three consecutive weeks; combined with all four product lines trending downward, watch for sustained portfolio-wide deceleration next week."
+  },
+  "2026-06-08": {
+    "executive_summary": "Total revenue of $388,489 beat plan by $4,801 (+1.3%), keeping the portfolio on track. The primary driver was broad-based strength in API (+5.0% to plan, +27.1% WoW) and SMB (+2.6% to plan), which more than offset a $2,230 shortfall in Consulting. While the top line is healthy, three of four product lines show declining or weakening momentum that bears watching.",
+    "top_3_drivers": [
+      "API outperformed plan by 5.0% ($52,119 vs $49,626) with a standout +27.1% WoW acceleration, the strongest momentum in the portfolio.",
+      "SMB beat plan by 2.6% ($104,960 vs $102,271) and grew +6.6% WoW, providing stable, reliable upside.",
+      "Consulting missed plan by 7.6% ($26,971 vs $29,201, a $2,230 shortfall) and declined -5.4% WoW, partially eroding portfolio gains."
+    ],
+    "risk_flag": "Consulting has now declined for four consecutive weeks and is flagged At Risk; a continued slide combined with Enterprise's declining trend could pressure portfolio variance next week."
+  },
+  "2026-06-15": {
+    "executive_summary": "Total revenue of $362,109 came in $11,502 (-3.1%) below plan, with all four product lines posting negative variances ranging from -2.3% to -4.0%. Enterprise was the largest dollar driver of the shortfall at $4,513 under plan (-2.3%), compounded by a broad week-over-week decline across the portfolio. Despite the miss, the portfolio remains on track, indicating the variance is within acceptable tolerance rather than a structural issue.",
+    "top_3_drivers": [
+      "Enterprise drove the largest absolute shortfall at -$4,513 (-2.3% to plan) and declined -7.6% WoW, making it the single biggest contributor to the portfolio miss.",
+      "SMB and API tied for the steepest percentage variance at -4.0% each (-$4,004 and -$2,022 respectively), with SMB also falling -8.8% WoW, the sharpest sequential drop in the portfolio.",
+      "Consulting was the lone bright spot on momentum, growing +9.4% WoW despite a -3.2% miss to plan, partially offsetting weakness elsewhere.",
+      "Three of four lines show Declining or Stable trends, with only API Improving, signaling broad-based softness rather than an isolated line."
+    ],
+    "risk_flag": "Watch Enterprise closely next week, as its combination of largest dollar variance, -7.6% WoW decline, and Declining trend poses the greatest risk of an accelerating shortfall."
+  }
+}
