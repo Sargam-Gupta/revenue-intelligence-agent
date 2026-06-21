@@ -97,6 +97,30 @@ ships with both committed, so step 5 works out of the box.
 - **Executive-ready visuals** — grouped actual-vs-plan bars, a 12-week trend with
   plan reference lines, and a color-coded status table.
 
+## Methodology
+
+**Status is direction-aware.** Each product line (and the portfolio) is scored
+against plan into one of five buckets — beating plan and missing plan never share
+a label:
+
+| Status | Variance vs. plan |
+|--------|-------------------|
+| **Ahead of Plan** | more than +15% above plan (notable overperformance — may signal a forecasting gap) |
+| **Favorable** | +5% to +15% above plan |
+| **On Track** | within ±5% of plan |
+| **At Risk** | −5% to −15% below plan |
+| **Critical** | more than −15% below plan |
+
+**Trend** is the regression **slope of variance% over the trailing 4 weeks** — not
+a simple first-vs-last comparison — so it's resistant to single-week noise. A line
+must move roughly 1 percentage point per week to count as Improving/Declining
+rather than Stable.
+
+**Anomalies** are flagged programmatically and handed to the model as grounding:
+a line in Critical territory, a 3+ week decline streak, or a line that has beaten
+plan by more than 15% for 2+ consecutive weeks (a prompt to review forecast
+assumptions).
+
 ## Project Context
 
 Built as part of a Finance × AI portfolio to demonstrate applied AI development in

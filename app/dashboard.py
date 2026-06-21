@@ -29,7 +29,11 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from analysis.variance_engine import calculate_variance  # noqa: E402
+from analysis.variance_engine import (  # noqa: E402
+    STATUS_DEFINITIONS,
+    STATUS_ORDER,
+    calculate_variance,
+)
 
 CSV_PATH = ROOT / "data" / "revenue_data.csv"
 CACHE_PATH = ROOT / "data" / "narratives_cache.json"
@@ -49,11 +53,23 @@ POS = "#16A34A"          # green-600
 NEG = "#DC2626"          # red-600
 WARN = "#D97706"         # amber-600
 
+# Colors live here (presentation), keyed by the engine's canonical status labels.
+# "Ahead of Plan" gets a distinct indigo (not the brand blue used for Actuals) and
+# "Favorable" a teal, so beating-plan states read as positive without colliding
+# with the chart's Actuals color or with On Track's green.
 STATUS_META = {
-    "On Track": {"color": POS, "bg": "#DCFCE7", "fg": "#166534"},
-    "At Risk": {"color": WARN, "bg": "#FEF3C7", "fg": "#92400E"},
-    "Critical": {"color": NEG, "bg": "#FEE2E2", "fg": "#991B1B"},
+    "Ahead of Plan": {"color": "#4F46E5", "bg": "#EEF2FF", "fg": "#3730A3"},  # indigo
+    "Favorable": {"color": "#0D9488", "bg": "#CCFBF1", "fg": "#115E59"},      # teal
+    "On Track": {"color": POS, "bg": "#DCFCE7", "fg": "#166534"},             # green
+    "At Risk": {"color": WARN, "bg": "#FEF3C7", "fg": "#92400E"},             # amber
+    "Critical": {"color": NEG, "bg": "#FEE2E2", "fg": "#991B1B"},             # red
 }
+
+# Fail loudly at import if a status bucket has no color, rather than silently
+# falling back (which could render a Critical line as green and hide the bug).
+_missing = set(STATUS_ORDER) - set(STATUS_META)
+if _missing:
+    raise RuntimeError(f"STATUS_META is missing colors for: {sorted(_missing)}")
 
 # Per-line palette for the trend chart.
 LINE_PALETTE = {
@@ -83,9 +99,27 @@ def inject_css() -> None:
         html, body, [class*="css"], .stApp { font-family: 'Inter', -apple-system, sans-serif; }
         .stApp { background: #F1F5F9; }
 
-        /* Hide default Streamlit chrome for a product-grade look */
-        #MainMenu, header[data-testid="stHeader"], footer { visibility: hidden; height: 0; }
-        [data-testid="stToolbar"], [data-testid="stDecoration"] { display: none; }
+        /* Hide default Streamlit chrome for a product-grade look. Keep the header
+           itself (it hosts the sidebar collapse/expand toggle) but make it blend
+           in, so a collapsed sidebar can always be reopened. */
+        #MainMenu, footer { visibility: hidden; height: 0; }
+        header[data-testid="stHeader"] { background: transparent; }
+        /* Hide the toolbar's right-side clutter (Deploy button, main menu) and the
+           colored bar - but DON'T hide the whole toolbar: it also contains the
+           sidebar expand button, so blanking it leaves no way to reopen a
+           collapsed sidebar. */
+        [data-testid="stToolbarActions"], [data-testid="stAppDeployButton"],
+        [data-testid="stDecoration"] { display: none; }
+        /* When the sidebar is collapsed, this expand control (the button itself)
+           sits at the top-left over the dark hero band. Style it as a visible
+           white pill with a dark icon and high z-index so it can always be found
+           and clicked. */
+        [data-testid="stExpandSidebarButton"] {
+            background: #ffffff !important; z-index: 1000;
+            border: 1px solid #E2E8F0; border-radius: 9px;
+            box-shadow: 0 2px 10px rgba(15,23,42,0.22);
+        }
+        [data-testid="stExpandSidebarButton"] span { color: #0F172A !important; }
         .block-container { padding: 1.4rem 2.6rem 4rem 2.6rem; max-width: 1320px; }
 
         /* Tabular, lining figures for money */
@@ -351,7 +385,7 @@ def build_trend_chart(df: pd.DataFrame) -> go.Figure:
 # --------------------------------------------------------------------------- #
 def render_hero(summary: dict) -> None:
     status = summary["portfolio"]["status"]
-    meta = STATUS_META.get(status, STATUS_META["On Track"])
+    meta = STATUS_META[status]
     mark = (
         "<svg width='26' height='26' viewBox='0 0 24 24' fill='none'>"
         "<path d='M4 16 L9 10 L13 13 L20 5' stroke='white' stroke-width='2.4' "
@@ -387,7 +421,7 @@ def render_kpis(summary: dict, wow_pct: float | None) -> None:
     p = summary["portfolio"]
     var_pos = p["variance_dollars"] >= 0
     var_color = POS if var_pos else NEG
-    status_meta = STATUS_META.get(p["status"], STATUS_META["On Track"])
+    status_meta = STATUS_META[p["status"]]
 
     if wow_pct is None:
         wow_html = '<span class="kpi-sub neutral">First reporting week</span>'
@@ -436,7 +470,7 @@ def render_status_table(summary: dict) -> None:
     }
     rows = ""
     for name, pl in summary["product_lines"].items():
-        meta = STATUS_META.get(pl["status"], STATUS_META["On Track"])
+        meta = STATUS_META[pl["status"]]
         var_cls = "var-pos" if pl["variance_pct"] >= 0 else "var-neg"
         wow_cls = "var-pos" if pl["wow_change_pct"] >= 0 else "var-neg"
         ticon, tcolor = trend_icons.get(pl["trend"], ("→", MUTED))
@@ -511,11 +545,11 @@ def render_signals(summary: dict) -> None:
         return
 
     # No anomalies: show the status distribution across product lines.
-    counts = {"On Track": 0, "At Risk": 0, "Critical": 0}
+    counts = {label: 0 for label in STATUS_ORDER}
     for pl in summary["product_lines"].values():
         counts[pl["status"]] = counts.get(pl["status"], 0) + 1
     rows = ""
-    for label in ("On Track", "At Risk", "Critical"):
+    for label in STATUS_ORDER:
         m = STATUS_META[label]
         rows += (
             f'<div class="recap-row"><span style="display:flex;align-items:center;gap:9px;">'
@@ -562,11 +596,20 @@ def render_sidebar(weeks_desc: list[str]) -> str:
 
         st.markdown('<div class="side-lbl">Methodology</div>', unsafe_allow_html=True)
         with st.expander("How variance is scored"):
+            # Built from the engine's STATUS_DEFINITIONS so the 5 buckets shown
+            # here always match the thresholds actually used to classify.
+            defs = "".join(
+                f"- **{label}** &mdash; {STATUS_DEFINITIONS[label].replace('+/-', '±')}\n"
+                for label in STATUS_ORDER
+            )
             st.markdown(
-                "- **On Track** &mdash; within ±5% of plan\n"
-                "- **At Risk** &mdash; ±5% to ±15% of plan\n"
-                "- **Critical** &mdash; beyond ±15% of plan\n\n"
-                "Trend is the slope of variance over the trailing 4 weeks. "
+                defs
+                + "\nStatus is **direction-aware**: a line beating plan is never "
+                "labelled At Risk or Critical.\n\n"
+                "Trend is the **slope of variance% over the trailing 4 weeks** "
+                "(not just first-vs-last) &mdash; intentionally, so it's resistant to "
+                "single-week noise. A line must move roughly 1pp/week to count as "
+                "trending rather than stable.\n\n"
                 "Anomalies are flagged programmatically and handed to the model as grounding."
             )
 

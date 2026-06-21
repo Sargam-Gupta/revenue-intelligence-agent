@@ -18,6 +18,17 @@ from typing import Any
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
+# The status taxonomy is owned by the variance engine; import it so the prompt's
+# definitions can never drift from the thresholds the dashboard actually uses.
+try:
+    from analysis.variance_engine import STATUS_DEFINITIONS, STATUS_ORDER
+except ModuleNotFoundError:  # running this file standalone, before sys.path is set
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from analysis.variance_engine import STATUS_DEFINITIONS, STATUS_ORDER
+
 # Load ANTHROPIC_API_KEY from a local .env if present. On Streamlit Cloud the
 # key is injected via the secret store; in the cached-only deploy it's absent
 # and that's fine because generate_narrative is never called there.
@@ -26,10 +37,26 @@ load_dotenv()
 MODEL = "claude-opus-4-8"
 MAX_TOKENS = 2000
 
+
+def _status_taxonomy_block() -> str:
+    """Render the engine's status buckets as prompt text, in presentation order."""
+    lines = ["Status definitions (based on actual-vs-plan variance):"]
+    lines += [f'- "{label}": {STATUS_DEFINITIONS[label]}' for label in STATUS_ORDER]
+    lines.append(
+        'Never describe a product line that is beating plan as "At Risk" or '
+        '"Critical" - use "Favorable" or "Ahead of Plan". Likewise, never describe '
+        'a line that is missing plan as "Favorable" or "Ahead of Plan".'
+    )
+    return "\n".join(lines)
+
+
+# The taxonomy is stable context (it doesn't change per week), so it lives in the
+# system prompt rather than the per-week user message.
 SYSTEM_PROMPT = (
     "You are a senior FP&A analyst at a technology company. You write concise, "
     "accurate, and actionable revenue variance commentaries for executive audiences. "
-    "Your output is always structured, data-specific, and free of filler language."
+    "Your output is always structured, data-specific, and free of filler language.\n\n"
+    + _status_taxonomy_block()
 )
 
 FALLBACK_NARRATIVE: dict[str, Any] = {

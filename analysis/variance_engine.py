@@ -12,24 +12,69 @@ from __future__ import annotations
 
 import pandas as pd
 
-# Status thresholds, expressed as absolute variance percentage from plan.
-ON_TRACK_LIMIT = 5.0    # within +/-5%
-AT_RISK_LIMIT = 15.0    # +/-5% to +/-15%; beyond +/-15% is Critical
+# --------------------------------------------------------------------------- #
+# Status taxonomy - the SINGLE SOURCE OF TRUTH for the 5 status buckets.
+#
+# Status is direction-aware: beating plan and missing plan never share a label.
+# Everything downstream (the dashboard's colors/legend/signal counts and the AI
+# narrative prompt's taxonomy text) is derived from STATUS_ORDER / STATUS_DEFINITIONS
+# below, so the buckets are defined in exactly one place.
+# --------------------------------------------------------------------------- #
+ON_TRACK_LIMIT = 5.0    # within +/-5% of plan is "On Track"
+AT_RISK_LIMIT = 15.0    # the +/-15% boundary between the moderate and extreme bands
+
+# Status labels (module constants so the classifier and the metadata below can
+# never drift out of sync via a typo).
+AHEAD_OF_PLAN = "Ahead of Plan"
+FAVORABLE = "Favorable"
+ON_TRACK = "On Track"
+AT_RISK = "At Risk"
+CRITICAL = "Critical"
+
+# Presentation order: best performance first, worst last. Consumed by the
+# dashboard legend and the "This Week's Signals" recap so they list all 5 buckets.
+STATUS_ORDER = [AHEAD_OF_PLAN, FAVORABLE, ON_TRACK, AT_RISK, CRITICAL]
+
+# Plain-language definition of each bucket. The narrative engine renders these
+# verbatim into the prompt so the model always describes the labels correctly.
+# ASCII only ("+/-") so these strings are safe to print on a cp1252 console.
+STATUS_DEFINITIONS = {
+    AHEAD_OF_PLAN: "more than 15% above plan - notable overperformance, may indicate a forecasting gap",
+    FAVORABLE: "5% to 15% above plan",
+    ON_TRACK: "within +/-5% of plan",
+    AT_RISK: "5% to 15% below plan",
+    CRITICAL: "more than 15% below plan",
+}
 
 TREND_WEEKS = 4         # rolling window for trend direction
+# Slope thresholds of +/-1.0 percentage points per week were chosen to filter out
+# single-week noise while still catching multi-week directional shifts. A line
+# needs to be moving roughly 1pp/week in variance% to be classified as trending,
+# rather than stable.
 TREND_FLAT_BAND = 1.0   # |slope of variance%| below this is "Stable"
 
 PRODUCT_LINE_ORDER = ["Enterprise", "SMB", "API", "Consulting"]
 
 
-def _status_from_variance_pct(variance_pct: float) -> str:
-    """Map a signed variance percentage to a status label."""
-    magnitude = abs(variance_pct)
-    if magnitude <= ON_TRACK_LIMIT:
-        return "On Track"
-    if magnitude <= AT_RISK_LIMIT:
-        return "At Risk"
-    return "Critical"
+def classify_status(variance_pct: float) -> str:
+    """Map a signed variance percentage to one of the 5 direction-aware buckets.
+
+    Boundaries resolve to the *less severe* band (toward On Track):
+        v < -15            -> Critical
+        -15 <= v < -5      -> At Risk
+        -5 <= v <= +5      -> On Track
+        +5 < v <= +15      -> Favorable
+        v > +15            -> Ahead of Plan
+    """
+    if variance_pct < -AT_RISK_LIMIT:
+        return CRITICAL
+    if variance_pct < -ON_TRACK_LIMIT:
+        return AT_RISK
+    if variance_pct <= ON_TRACK_LIMIT:
+        return ON_TRACK
+    if variance_pct <= AT_RISK_LIMIT:
+        return FAVORABLE
+    return AHEAD_OF_PLAN
 
 
 def _sorted_weeks(df: pd.DataFrame) -> list[str]:
@@ -71,6 +116,23 @@ def _consecutive_decline_weeks(line_history: pd.DataFrame) -> int:
     streak = 0
     for i in range(len(actuals) - 1, 0, -1):
         if actuals[i] < actuals[i - 1]:
+            streak += 1
+        else:
+            break
+    return streak
+
+
+def _consecutive_ahead_weeks(line_history: pd.DataFrame) -> int:
+    """Count trailing weeks where actual beat plan by more than +15% (Ahead of Plan).
+
+    Tied to AT_RISK_LIMIT so this streak always means "Ahead of Plan status
+    persisting" - it can't drift away from the status band definition.
+    """
+    actual = line_history["actual_revenue"].tolist()
+    plan = line_history["plan_revenue"].tolist()
+    streak = 0
+    for i in range(len(actual) - 1, -1, -1):
+        if plan[i] and (actual[i] - plan[i]) / plan[i] * 100 > AT_RISK_LIMIT:
             streak += 1
         else:
             break
@@ -126,7 +188,7 @@ def calculate_variance(df: pd.DataFrame, week: str | None = None) -> dict:
                 if prev_actual:
                     wow_change_pct = round((actual - prev_actual) / prev_actual * 100, 1)
 
-        status = _status_from_variance_pct(variance_pct)
+        status = classify_status(variance_pct)
 
         # Trend uses history up to and including the target week.
         line_history = (
@@ -146,19 +208,24 @@ def calculate_variance(df: pd.DataFrame, week: str | None = None) -> dict:
         }
 
         # --- Anomaly detection (data-grounded, for the AI to reference) ---
-        if status == "Critical":
-            if variance_pct < 0:
-                anomalies.append(
-                    f"{line} variance is {variance_pct:+.1f}% - beyond the -15% threshold, flagged as Critical"
-                )
-            else:
-                anomalies.append(
-                    f"{line} beats plan by {variance_pct:+.1f}% - an unusually large upside vs plan"
-                )
+        # Critical is now always a miss (the 5-bucket taxonomy routes large
+        # upside to Ahead of Plan), so this only flags downside.
+        if status == CRITICAL:
+            anomalies.append(
+                f"{line} variance is {variance_pct:+.1f}% - beyond the -15% threshold, flagged as Critical"
+            )
 
         decline_streak = _consecutive_decline_weeks(line_history)
         if decline_streak >= 3:
             anomalies.append(f"{line} has declined for {decline_streak} consecutive weeks")
+
+        # Sustained upside is also a reportable signal (under-forecasting,
+        # pulled-forward revenue, or a one-time event worth understanding).
+        ahead_streak = _consecutive_ahead_weeks(line_history)
+        if ahead_streak >= 2:
+            anomalies.append(
+                f"{line} has beaten plan by more than 15% for {ahead_streak} consecutive weeks - review forecast assumptions"
+            )
 
     # --- Portfolio rollup ---
     total_actual = float(current["actual_revenue"].sum())
@@ -171,7 +238,7 @@ def calculate_variance(df: pd.DataFrame, week: str | None = None) -> dict:
         "total_plan": round(total_plan, 2),
         "variance_dollars": round(portfolio_variance_dollars, 2),
         "variance_pct": portfolio_variance_pct,
-        "status": _status_from_variance_pct(portfolio_variance_pct),
+        "status": classify_status(portfolio_variance_pct),
     }
 
     return {

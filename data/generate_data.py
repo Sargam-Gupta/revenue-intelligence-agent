@@ -46,6 +46,10 @@ NUM_WEEKS = 12  # weeks are numbered 1..12, with week 12 = most recent
 # Week numbers are 1-indexed from oldest (1) to newest (12).
 PLANTED_ANOMALIES = {
     (4, "Enterprise"): 0.78,   # lost deal: misses plan by 22%
+    # Sustained Consulting upside: >15% over plan for 2 consecutive weeks
+    # (under-forecasting / pulled-forward revenue) -> trips the favorable anomaly.
+    (5, "Consulting"): 1.19,   # beats plan by 19%
+    (6, "Consulting"): 1.22,   # beats plan by 22% (2nd straight week ahead of plan)
     (7, "SMB"): 1.18,          # campaign spike: beats plan by 18%
     (10, "API"): 0.85,         # churn event: misses plan by 15%
 }

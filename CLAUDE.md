@@ -30,12 +30,15 @@ and it runs locally — never on Streamlit Cloud.
 
 - **`data/generate_data.py`** — Seeded RNG (`np.random.default_rng(42)`), so the
   dataset and its planted anomalies are reproducible. 12 weeks × 4 lines = 48 rows.
-  Planted anomalies: Wk4 Enterprise −22%, Wk7 SMB +18%, Wk10 API −15%, Wk12 portfolio
-  slightly below plan. Don't change the seed or anomalies without re-running pregenerate.
+  Planted anomalies: Wk4 Enterprise −22%, Wk5–6 Consulting +19%/+22% (a 2-week
+  ahead-of-plan streak), Wk7 SMB +18%, Wk10 API −15%, Wk12 portfolio slightly below
+  plan. Don't change the seed or anomalies without re-running pregenerate.
 - **`analysis/variance_engine.py`** — Pure, stateless, pandas-only. `calculate_variance(df, week=None)`
   returns the canonical dict (`week`, `portfolio`, `product_lines{...}`, `anomalies[]`).
-  Status thresholds: On Track ±5%, At Risk ±5–15%, Critical beyond ±15%. This dict is
-  the single source of truth consumed by both the narrative engine and the dashboard.
+  Status is **direction-aware** (5 buckets): Ahead of Plan >+15%, Favorable +5–15%,
+  On Track ±5%, At Risk −5–15%, Critical beyond −15%. The taxonomy
+  (`STATUS_ORDER`/`STATUS_DEFINITIONS` + `classify_status()`) is the single source of
+  truth — the dashboard colors/legend/signals and the narrative prompt all derive from it.
 - **`ai/narrative_engine.py`** — Model `claude-opus-4-8`. Uses `client.messages.parse(...,
   output_format=ExecutiveNarrative)` (Pydantic) so the three sections come back as typed
   fields, not parsed text. Returns a fallback dict (never raises) on API failure.
