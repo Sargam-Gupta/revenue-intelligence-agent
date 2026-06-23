@@ -1,0 +1,11 @@
+# Let git auto-detect text vs binary by default.
+* text=auto
+
+# Container- and Linux-consumed files MUST stay LF in the working tree, so a
+# Windows checkout (which would otherwise convert to CRLF) can't break the Docker
+# build or shell parsing inside the container.
+n8n/Dockerfile      text eol=lf
+*.sh                text eol=lf
+*.yml               text eol=lf
+*.yaml              text eol=lf
+requirements*.txt   text eol=lf
