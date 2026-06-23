@@ -249,11 +249,43 @@ def calculate_variance(df: pd.DataFrame, week: str | None = None) -> dict:
     }
 
 
-if __name__ == "__main__":
+def _main() -> None:
+    """CLI entry point. Compute one week's variance summary and emit it as JSON.
+
+    Used by the n8n analysis-layer node:
+        python3 analysis/variance_engine.py --week latest --out run/variance.json
+    Confirmations go to stderr so stdout carries only the JSON payload (pipe-safe).
+    """
+    import argparse
     import json
+    import sys
     from pathlib import Path
+
+    parser = argparse.ArgumentParser(description="Compute the variance summary for one week.")
+    parser.add_argument(
+        "--week", default="latest",
+        help="ISO week_start_date (YYYY-MM-DD) or 'latest' (default).",
+    )
+    parser.add_argument(
+        "--out", default="-",
+        help="Output JSON file path, or '-' for stdout (default).",
+    )
+    args = parser.parse_args()
 
     csv_path = Path(__file__).resolve().parent.parent / "data" / "revenue_data.csv"
     frame = pd.read_csv(csv_path)
-    summary = calculate_variance(frame)
-    print(json.dumps(summary, indent=2))
+    week = None if args.week == "latest" else args.week
+    summary = calculate_variance(frame, week=week)
+    payload = json.dumps(summary, indent=2)
+
+    if args.out == "-":
+        print(payload)
+    else:
+        out_path = Path(args.out)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(payload, encoding="utf-8")
+        print(f"[OK] wrote variance for week {summary['week']} to {out_path}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    _main()

@@ -9,3 +9,7 @@ venv/
 .venv/
 .playwright-mcp/
 *.png
+
+# n8n automation scratch space + local n8n state (see n8n_workflow_spec.md)
+run/
+n8n/data/

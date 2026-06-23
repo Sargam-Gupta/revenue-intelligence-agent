@@ -110,9 +110,34 @@ def generate_dataframe() -> pd.DataFrame:
 
 
 def main() -> None:
-    df = generate_dataframe()
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Generate (or validate) the synthetic weekly revenue dataset."
+    )
+    parser.add_argument(
+        "--ensure", action="store_true",
+        help=(
+            "Generate the CSV only if it is missing; otherwise read it, report the "
+            "latest week, and do NOT overwrite. Used by the n8n data-layer node so a "
+            "weekly run never reshuffles the date keys the narrative cache is keyed on."
+        ),
+    )
+    args = parser.parse_args()
 
     out_path = Path(__file__).resolve().parent / "revenue_data.csv"
+
+    if args.ensure and out_path.exists():
+        existing = pd.read_csv(out_path)
+        latest_week = existing["week_start_date"].max()
+        n_weeks = existing["week_start_date"].nunique()
+        print(
+            f"[OK] dataset present: {len(existing)} rows, {n_weeks} weeks, "
+            f"latest {latest_week} (not regenerated)"
+        )
+        return
+
+    df = generate_dataframe()
     df.to_csv(out_path, index=False)
 
     print(f"Wrote {len(df)} rows to {out_path}")

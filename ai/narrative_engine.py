@@ -167,20 +167,46 @@ def generate_narrative(variance_summary: dict) -> dict:
     return narrative.model_dump()
 
 
-if __name__ == "__main__":
+def _main() -> None:
+    """CLI entry point. Read a variance summary JSON and emit its narrative JSON.
+
+    Used by the n8n AI-layer node:
+        python3 ai/narrative_engine.py --input run/variance.json --out run/narrative.json
+    This reuses the exact prompt/structured-output path the dashboard uses, so the
+    automation can't drift from the app. Confirmations go to stderr.
+    """
+    import argparse
     import json
+    import sys
     from pathlib import Path
 
-    import pandas as pd
+    parser = argparse.ArgumentParser(
+        description="Generate the executive narrative for a variance summary."
+    )
+    parser.add_argument(
+        "--input", default="-",
+        help="Variance summary JSON file, or '-' for stdin (default).",
+    )
+    parser.add_argument(
+        "--out", default="-",
+        help="Output narrative JSON file, or '-' for stdout (default).",
+    )
+    args = parser.parse_args()
 
-    # Allow running this file directly for a quick standalone smoke test.
-    import sys
+    raw = sys.stdin.read() if args.input == "-" else Path(args.input).read_text(encoding="utf-8")
+    summary = json.loads(raw)
 
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-    from analysis.variance_engine import calculate_variance
+    narrative = generate_narrative(summary)
+    payload = json.dumps(narrative, indent=2)
 
-    csv_path = Path(__file__).resolve().parent.parent / "data" / "revenue_data.csv"
-    df = pd.read_csv(csv_path)
-    summary = calculate_variance(df)
-    result = generate_narrative(summary)
-    print(json.dumps(result, indent=2))
+    if args.out == "-":
+        print(payload)
+    else:
+        out_path = Path(args.out)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(payload, encoding="utf-8")
+        print(f"[OK] wrote narrative to {out_path}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    _main()
