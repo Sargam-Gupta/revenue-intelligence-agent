@@ -101,12 +101,12 @@
     "risk_flag": "Enterprise has now declined for three consecutive weeks and is below plan, signaling a deteriorating trend that could pressure the portfolio if it continues."
   },
   "2026-06-15": {
-    "executive_summary": "Total portfolio revenue came in at $357,143 against a plan of $371,242, a variance of -$14,099 (-3.8%), keeping the portfolio On Track. The shortfall was driven primarily by Enterprise, which missed plan by 4.4% (-$8,628) and accounts for the majority of total variance. With all four product lines below plan and trending down week-over-week, momentum is softening despite the in-tolerance topline.",
+    "executive_summary": "Total portfolio revenue of $357,143 came in 3.8% below plan ($-14,099), keeping the overall status On Track. Enterprise was the largest contributor to the shortfall, missing plan by 4.4% ($-8,628). All four product lines finished below plan with broad-based week-over-week declines.",
     "top_3_drivers": [
-      "Enterprise drove the largest dollar shortfall at -$8,628 (-4.4% vs plan) and declined 2.1% WoW, now in its fourth consecutive week of decline.",
-      "SMB missed plan by 2.3% (-$2,256) and posted the steepest WoW drop at -7.6%, signaling accelerating deceleration.",
-      "API and Consulting each missed plan by 4.0% (-$2,002 and -$1,214 respectively) with sharp WoW declines of -8.8% and -7.9%, indicating broad-based softness across smaller lines."
+      "Enterprise drove the bulk of the miss, down 4.4% to $186,044 vs. $194,672 plan and declining 2.1% WoW, marking its 4th consecutive week of decline.",
+      "SMB posted the steepest week-over-week drop at -7.6% (actual $94,464 vs. $96,720 plan, -2.3%), signaling softening demand.",
+      "API and Consulting each missed plan by 4.0% ($47,846 vs. $49,848 and $28,789 vs. $30,003) with sharp WoW declines of -8.8% and -7.9% respectively."
     ],
-    "risk_flag": "Enterprise's four-week consecutive decline is the key risk to monitor, as continued erosion in the portfolio's largest line could push the topline from On Track into At Risk territory next week."
+    "risk_flag": "Enterprise's 4-week consecutive decline is the primary concern\u2014if the downtrend continues, it could push the portfolio out of On Track range next week."
   }
 }
