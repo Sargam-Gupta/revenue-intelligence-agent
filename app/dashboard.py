@@ -242,6 +242,23 @@ def inject_css() -> None:
         /* ---------- Sidebar ---------- */
         [data-testid="stSidebar"] { background: #fff; border-right: 1px solid #E2E8F0; }
         [data-testid="stSidebar"] .block-container { padding-top: 1.4rem; }
+
+        /* Reporting-week selectbox: it's a baseweb combobox with an editable text
+           input, so focusing it shows a blinking text caret ("2026-04-20|") and a
+           red default-primary focus ring. We never type in it (pick-only), so hide
+           the caret, use a pointer cursor, and recolor the focus border to brand
+           blue. Keeps screen recordings clean — no flickering I-beam at the date. */
+        [data-baseweb="select"] input {
+            caret-color: transparent !important;
+            cursor: pointer !important;
+        }
+        [data-baseweb="select"] > div {
+            cursor: pointer !important;
+        }
+        [data-baseweb="select"] > div:focus-within {
+            border-color: #2563EB !important;
+            box-shadow: 0 0 0 1px #2563EB !important;
+        }
         .side-brand { font-weight: 800; color: #0F172A; font-size: 1.05rem; letter-spacing: -0.01em; }
         .side-lbl { color: #94A3B8; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin: 14px 0 4px 0; }
         .legend-row { display: flex; align-items: center; gap: 9px; font-size: 0.84rem; color: #475569; padding: 3px 0; }
