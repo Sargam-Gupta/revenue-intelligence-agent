@@ -1,0 +1,129 @@
+[
+  {
+    "createdAt": "2026-06-25T05:42:47.252Z",
+    "updatedAt": "2026-06-25T06:34:23.000Z",
+    "id": "MZOniuyZOPvCKf9N",
+    "name": "Revenue Automation - Weekly",
+    "active": false,
+    "nodes": [
+      {
+        "parameters": {
+          "command": "cd /repo && python3 data/generate_data.py --ensure"
+        },
+        "type": "n8n-nodes-base.executeCommand",
+        "typeVersion": 1,
+        "position": [
+          220,
+          0
+        ],
+        "id": "bf6eb540-bfea-4228-bccf-e45baf5df3fa",
+        "name": "Read/Validate Data"
+      },
+      {
+        "parameters": {
+          "command": "cd /repo && python3 analysis/variance_engine.py --week latest --out run/variance.json"
+        },
+        "type": "n8n-nodes-base.executeCommand",
+        "typeVersion": 1,
+        "position": [
+          440,
+          0
+        ],
+        "id": "6c927b61-f8ee-485c-a348-171361369703",
+        "name": "Variance"
+      },
+      {
+        "parameters": {
+          "command": "cd /repo && python3 ai/narrative_engine.py --input run/variance.json --out run/narrative.json"
+        },
+        "type": "n8n-nodes-base.executeCommand",
+        "typeVersion": 1,
+        "position": [
+          660,
+          0
+        ],
+        "id": "6a940b2a-65a6-4e69-8193-6f75c750092b",
+        "name": "Narrative"
+      },
+      {
+        "parameters": {
+          "command": "cd /repo && python3 scripts/update_cache.py --variance run/variance.json --narrative run/narrative.json && git add data/narratives_cache.json && (git commit -m \"Auto: refresh weekly narrative cache\" || true) && git push \"https://x-access-token:${GH_TOKEN}@github.com/Sargam-Gupta/revenue-intelligence-agent.git\" HEAD:main"
+        },
+        "type": "n8n-nodes-base.executeCommand",
+        "typeVersion": 1,
+        "position": [
+          880,
+          0
+        ],
+        "id": "2047350f-cebf-4b39-a90a-e0af9f179356",
+        "name": "Update Cache & Publish"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "dd10a65a-c423-4799-8589-b4f8f3866451",
+        "name": "Schedule Trigger"
+      }
+    ],
+    "connections": {
+      "Read/Validate Data": {
+        "main": [
+          [
+            {
+              "node": "Variance",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Variance": {
+        "main": [
+          [
+            {
+              "node": "Narrative",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Narrative": {
+        "main": [
+          [
+            {
+              "node": "Update Cache & Publish",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Read/Validate Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "9c58f9b5-5231-4f9b-b594-f84669d8b968",
+    "triggerCount": 0,
+    "tags": []
+  }
+]
