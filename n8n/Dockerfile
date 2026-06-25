@@ -6,7 +6,13 @@
 # wheels, so pip installs without a compiler. If a future version bump lacks a
 # musl wheel and pip tries to build from source, add build deps:
 #   RUN apk add --no-cache build-base python3-dev cargo
-FROM n8nio/n8n:latest
+#
+# Pinned to 1.70.0 deliberately: n8nio/n8n:latest switched to a Docker Hardened
+# Image (no apk / no package manager), so `apk add python3` can't run there.
+# 1.70.0 is the last-known plain-Alpine tag we verified still ships apk. Don't
+# bump to :latest without solving the Python-install problem a different way
+# (multi-stage COPY of a venv, or a separate Python sidecar container).
+FROM n8nio/n8n:1.70.0
 
 USER root
 
