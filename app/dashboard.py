@@ -83,7 +83,9 @@ st.set_page_config(
     page_title="Revenue Intelligence Agent",
     page_icon="\U0001F4C8",
     layout="wide",
-    initial_sidebar_state="expanded",
+    # "auto" keeps the sidebar open on desktop but lets Streamlit collapse it on
+    # narrow (phone) viewports, so the dashboard isn't hidden behind an overlay.
+    initial_sidebar_state="auto",
 )
 
 
@@ -247,6 +249,46 @@ def inject_css() -> None:
 
         .foot { color: #94A3B8; font-size: 0.8rem; text-align: center; margin-top: 28px; }
         .foot b { color: #475569; }
+
+        /* ===================================================================
+           Responsive — tablet & phone. Desktop layout above is unchanged;
+           these breakpoints only reflow it onto narrow viewports.
+           =================================================================== */
+
+        /* Tablet / small laptop: reclaim side padding, drop the KPI grid to
+           2-up, and stack any side-by-side Streamlit column row vertically. */
+        @media (max-width: 820px) {
+            .block-container { padding: 1.1rem 1.1rem 3rem 1.1rem; }
+
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+            /* st.columns rows (charts; briefing + signals) → stack */
+            [data-testid="stHorizontalBlock"] { flex-direction: column; gap: 0.85rem; }
+            [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+                width: 100% !important; flex: 1 1 100% !important; min-width: 0 !important;
+            }
+        }
+
+        /* Phone: stack the hero, single-column KPIs, tighten the dense table. */
+        @media (max-width: 560px) {
+            .hero {
+                flex-direction: column; align-items: flex-start;
+                gap: 14px; padding: 18px 18px;
+            }
+            .hero-right { width: 100%; justify-content: space-between; gap: 12px; }
+            .hero-title { font-size: 1.18rem; }
+            .hero-sub { font-size: 0.76rem; }
+
+            .kpi-grid { grid-template-columns: 1fr; }
+            .kpi-val { font-size: 1.6rem; }
+
+            /* Table stays horizontally scrollable (.stat-wrap), just denser. */
+            table.stat { font-size: 0.82rem; }
+            table.stat thead th { padding: 6px 10px 10px 10px; }
+            table.stat tbody td { padding: 11px 10px; }
+
+            .brief-summary { font-size: 0.94rem; }
+        }
         </style>
         """,
         unsafe_allow_html=True,
