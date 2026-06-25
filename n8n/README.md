@@ -72,12 +72,3 @@ docker compose -f n8n/docker-compose.yml exec n8n sh -c '
 
 (Stops before the git push, so it is safe to run repeatedly.)
 
-## Deliverables for the case study
-
-1. Clean screenshot of the 5-node canvas after a successful run (green checks).
-2. 15–30s Loom of **Execute Workflow**, ending on the new GitHub commit / updated
-   live app.
-3. One sentence: "This n8n workflow makes the weekly reporting fully autonomous —
-   it reads the week's data, runs the variance analysis, generates the executive
-   narrative with Claude, updates the dashboard cache, and pushes it live, with no
-   analyst running a script."
