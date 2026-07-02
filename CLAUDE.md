@@ -76,6 +76,13 @@ is empty after `.run()` and after clicking the Run Analysis button.
 - **Secrets:** `.env` (gitignored) holds `ANTHROPIC_API_KEY` for local generation only.
   Never commit it. The deployed app does not read it.
 
+## Automation (built)
+
+**n8n / scheduled automation is now built** — a self-hosted n8n container
+(`n8n/`) runs the pipeline (read data -> variance -> narrative -> update cache ->
+commit & push to `main`) on a schedule or on demand, so Streamlit Cloud redeploys
+with no analyst running a script. See `n8n/README.md` and `n8n_workflow_spec.md`.
+
 ## Out of scope (documented as future work in README)
 
-n8n / scheduled automation, user CSV upload, DuckDB. Don't add these unless asked.
+User CSV upload, DuckDB. Don't add these unless asked.

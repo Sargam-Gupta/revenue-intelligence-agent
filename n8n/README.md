@@ -49,8 +49,16 @@ cd /repo \
  && python3 scripts/update_cache.py --variance run/variance.json --narrative run/narrative.json \
  && git add data/narratives_cache.json \
  && (git commit -m "Auto: refresh weekly narrative cache" || true) \
+ && git fetch origin main \
+ && git rebase FETCH_HEAD \
  && git push "https://x-access-token:${GH_TOKEN}@github.com/Sargam-Gupta/revenue-intelligence-agent.git" HEAD:main
 ```
+
+The `git fetch origin main && git rebase FETCH_HEAD` step makes the push
+self-healing: it replays the fresh cache commit on top of the current remote `main`
+before pushing, so a branch that has fallen behind `main` still produces a
+fast-forward push instead of a `non-fast-forward` rejection. In the happy path
+(branch already up to date) it's a harmless no-op.
 
 Streamlit Cloud watches the repo and redeploys on push, so the live app reflects
 the new narrative within a minute or two — no manual reboot.

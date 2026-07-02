@@ -47,7 +47,7 @@
       },
       {
         "parameters": {
-          "command": "cd /repo && python3 scripts/update_cache.py --variance run/variance.json --narrative run/narrative.json && git add data/narratives_cache.json && (git commit -m \"Auto: refresh weekly narrative cache\" || true) && git push \"https://x-access-token:${GH_TOKEN}@github.com/Sargam-Gupta/revenue-intelligence-agent.git\" HEAD:main"
+          "command": "cd /repo && python3 scripts/update_cache.py --variance run/variance.json --narrative run/narrative.json && git add data/narratives_cache.json && (git commit -m \"Auto: refresh weekly narrative cache\" || true) && git fetch origin main && git rebase FETCH_HEAD && git push \"https://x-access-token:${GH_TOKEN}@github.com/Sargam-Gupta/revenue-intelligence-agent.git\" HEAD:main"
         },
         "type": "n8n-nodes-base.executeCommand",
         "typeVersion": 1,
