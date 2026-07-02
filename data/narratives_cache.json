@@ -101,12 +101,12 @@
     "risk_flag": "Enterprise has now declined for three consecutive weeks and is below plan, signaling a deteriorating trend that could pressure the portfolio if it continues."
   },
   "2026-06-15": {
-    "executive_summary": "Total portfolio revenue of $357,143 came in 3.8% below plan ($-14,099), keeping the portfolio On Track but on the soft end of the range. Enterprise was the largest source of variance, missing plan by 4.4% ($-8,628) and declining for a fourth consecutive week. With all four product lines below plan and three showing sharp week-over-week declines, near-term momentum is weakening across the board.",
+    "executive_summary": "Total portfolio revenue of $357,143 came in 3.8% below plan ($-14,099), keeping the portfolio On Track within the +/-5% band. Enterprise was the single biggest driver of the miss, contributing $8,628 of the shortfall on a -4.4% variance. All four product lines missed plan this week, signaling broad-based softness that warrants monitoring despite the aggregate On Track status.",
     "top_3_drivers": [
-      "Enterprise drove the largest dollar shortfall at $186,044 vs. $194,672 plan (-4.4%, $-8,628) and fell -2.1% WoW, marking its fourth straight week of decline.",
-      "SMB missed plan by 2.3% ($94,464 vs. $96,720) but deteriorated most sharply on a weekly basis at -7.6% WoW, signaling accelerating softness.",
-      "API and Consulting each came in 4.0% below plan (-$2,002 and -$1,214 respectively), compounded by steep WoW drops of -8.8% and -7.9%."
+      "Enterprise missed plan by 4.4% ($186,044 vs $194,672), accounting for $8,628 of the total $14,099 shortfall, and has now declined for four consecutive weeks (-2.1% WoW).",
+      "SMB came in 2.3% below plan ($94,464 vs $96,720) with a sharp -7.6% week-over-week decline, indicating accelerating deceleration despite the modest variance.",
+      "API and Consulting each missed plan by 4.0% ($47,846 and $28,789 respectively), both posting steep WoW drops of -8.8% and -7.9% that added a combined $3,216 to the shortfall."
     ],
-    "risk_flag": "Watch Enterprise closely next week, as its four-week consecutive decline threatens to push the largest product line from On Track into At Risk territory."
+    "risk_flag": "Enterprise's four-week consecutive decline is the top watch item; continued erosion could push the largest revenue line below the -5% At Risk threshold and drag the full portfolio out of On Track next week."
   }
 }
